@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { StudentList } from './StudentList';
+import { SingleStudent } from './SingleStudent';
 
 export default class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
       students: [],
+      singleStudent: {},
     };
+    this.setStudent = this.setStudent.bind(this);
   }
 
   componentDidMount() {
@@ -23,23 +27,24 @@ export default class Main extends Component {
     }
   }
 
+  setStudent(studObj) {
+    this.setState({ singleStudent: studObj });
+  }
+
   render() {
     return (
       <div>
         <h1>Students</h1>
         <table>
-          <tbody>
-            <tr>
-              <th>Name</th>
-            </tr>
-            {this.state.students.map(student => {
-              return (
-                <tr key={student.id}>
-                  <td>{student.fullName}</td>
-                </tr>
-              );
-            })}
-          </tbody>
+          <StudentList
+            students={this.state.students}
+            setStudent={this.setStudent}
+          />
+          {Object.keys(this.state.singleStudent).length !== 0 ? (
+            <SingleStudent student={this.state.singleStudent} />
+          ) : (
+            ''
+          )}
         </table>
       </div>
     );
